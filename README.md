@@ -31,7 +31,7 @@ In order to correct the distortion from the images the calibration matrix as wel
 ```
 ret, corners = cv2.findChessboardCorners(gray, (nx, ny), None)
 ```
-Once all the corners are located and stored the calibration matrix and the distortion coefficients are calculated using the following OpenCV built in function. 
+Once all the corners are located and stored in a list called `imgpoints` the calibration matrix and the distortion coefficients are calculated using the following OpenCV built in function where `objpoints` is just an enumeration for further corners correspondence between images. 
 
 ```
 ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints, gray.shape[::-1], None, None)
@@ -42,12 +42,16 @@ Original image             |  Corrected image
 :-------------------------:|:-------------------------:
 ![][image1]                |  ![][image2]
 
+### 2. Distortion correction.
 
-In order to avoid salt and pepper noise the image is lightly blurred using a Gaussian Filter with a 3x3 kernel. 
+Using the found calibration parameters every incoming image from the camera is corrected using the following function.
 
-![][image3]
+Original image             |  Corrected image 
+:-------------------------:|:-------------------------:
+![][image3]                |  ![][image4]
 
-The next step in the pipeline is to perform Canny edge detection whose low and high thresholds were raised to 150 and 225 correspondingly looking to avoid noisy edges by only retaining the most sharp ones in the image, hopefully, the ones corresponding to the lane lines.
+
+
 
 ![alt text][image4]
 
