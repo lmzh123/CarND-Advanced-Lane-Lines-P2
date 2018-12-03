@@ -56,7 +56,7 @@ Original image             |  Corrected image
 :-------------------------:|:-------------------------:
 ![][image3]                |  ![][image4]
 
-### 2. Thresholding.
+### 3. Thresholding.
 Next step is to obtain the edges of the image. For this the approached that suited the best was two combine the S channel thresholding from HLS color space along with the magnitud of the gradient of RGB images. 
 
 ```
@@ -82,14 +82,32 @@ mag_binary[(scaled_mag >= mag_thresh[0]) & (scaled_mag <= mag_thresh[1])] = 1
 
 ![alt text][image5]
 
-Using the function `region_of_interest()` the image obtained using Canny is masked with a polygonal region using the `cv2.bitwise_and()` function from OpenCV. The vertices of this region were determined as follows:
+### 4. Bird-eye view.
 
+The idea now is to warp the binary image to transform the projected lines on the road as if they were seen from the top. For this a set of source and destination points are defined.
+
+Source points:
 | Point | X        | Y        |
 | ----- |:--------:| --------:|
-| 1     | 50       | h        |
-| 2     | (w/2)-50 | (h/2)+50 |
-| 3     | (w/2)+50 | (h/2)+50 |
-| 4     | w-50     | h        |
+| 1     | (w/2)-75 | (h/2)+100|
+| 2     | (w/2)+75 | (h/2)+100|
+| 3     | w-125    | h        |
+| 4     | 125      | h        |
+
+Destination points:
+| Point | X        | Y        |
+| ----- |:--------:| --------:|
+| 1     | 100      | 50       |
+| 2     | w-100    | 50       |
+| 3     | w-100    | h-50     |
+| 4     | 100      | h-50     |
+
+```
+ # Given src and dst points, calculate the perspective transform matrix
+ M = cv2.getPerspectiveTransform(src, dst)
+ # Warp the image using OpenCV warpPerspective()
+ warped = cv2.warpPerspective(img, M, (w,h))
+ ```
 
 Mask                       |  Masked edges image 
 :-------------------------:|:-------------------------:
