@@ -111,7 +111,7 @@ Destination points:
  warped = cv2.warpPerspective(img, M, (w,h))
  ```
 
-Mask                       |  Masked edges image 
+Binary                     |  Binary warped
 :-------------------------:|:-------------------------:
 ![][image5]                |  ![][image6]
 
