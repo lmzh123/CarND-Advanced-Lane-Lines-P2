@@ -115,7 +115,26 @@ Binary                     |  Binary warped
 :-------------------------:|:-------------------------:
 ![][image5]                |  ![][image6]
 
-Finally from these resulting edges the lines are obtained using the Hough's transformation. OpenCV posses the `cv2.HoughLinesP()` which performs the transformation and determines which of these segments correspond to lines and which don't based on different parameters. From these parameters the *threshold* and *minLineLength* were tuned looking for consistent and long lines, this means raising both parameters experimentaly.
+### 4. Lane pixels and curve fitting
+
+There are two different approaches in order to find the pixels corresponding to each line. The first one is a sliding window approach where rectangular regions are used to bound the search region for white pixels. As a starting point the binary warped image is split into two from the middle hoping to separete each line. The pixels along every column are summed up for both the left and right side and the column with the maximum values while corresponde to the beggining of each line.
+
+```
+# Take a histogram of the bottom half of the image
+histogram = np.sum(binary_warped[binary_warped.shape[0]//2:,:], axis=0)
+# Find the peak of the left and right halves of the histogram
+# These will be the starting point for the left and right lines
+midpoint = np.int(histogram.shape[0]//2)
+leftx_base = np.argmax(histogram[:midpoint])
+rightx_base = np.argmax(histogram[midpoint:]) + midpoint
+```
+The image will be splitted vertically and the windows will bound the area to determine the pixels that correspond to each line, if the number of found pixels are above a certain threshold the search area will be moved corresponding to the center of mass of those pixels. After this the found pixels of each line will be fitted into a secod degree polynomial.
+
+```
+# Fit a second order polynomial to each using `np.polyfit`
+left_fit = np.polyfit(lefty, leftx, 2)
+right_fit = np.polyfit(righty, rightx, 2)
+```
 
 ![alt text][image7]
 
