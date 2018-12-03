@@ -178,7 +178,7 @@ Finally the resulting curves can be unwarped and plotted into the original undis
 
 For a better representation the curves that bound the lane and the radius of curvature and offset are also displayed in the image.
 
-![][image9]
+![][image11]
 
 ### 8. Potential shortcomings
 
