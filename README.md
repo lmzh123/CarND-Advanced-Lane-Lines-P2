@@ -87,6 +87,7 @@ mag_binary[(scaled_mag >= mag_thresh[0]) & (scaled_mag <= mag_thresh[1])] = 1
 The idea now is to warp the binary image to transform the projected lines on the road as if they were seen from the top. For this a set of source and destination points are defined.
 
 Source points:
+
 | Point | X        | Y        |
 | ----- |:--------:| --------:|
 | 1     | (w/2)-75 | (h/2)+100|
@@ -95,6 +96,7 @@ Source points:
 | 4     | 125      | h        |
 
 Destination points:
+
 | Point | X        | Y        |
 | ----- |:--------:| --------:|
 | 1     | 100      | 50       |
