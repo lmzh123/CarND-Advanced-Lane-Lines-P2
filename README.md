@@ -169,17 +169,14 @@ right_bottomx = right_fit_cr[0]*y_eval**2 + right_fit_cr[1]*y_eval + right_fit_c
 curv_center = (left_bottomx + right_bottomx)/2
 offset = (curv_center - img_size[0]/2)*xm_per_pix
 ```
-### 2. Lines extrapolation
 
-Using the slope of a line equation it can be determined which of the remaining lines correspond to both the left and right line using an if statement within the `draw_lines()` function. For instance if the slope of a line is positive it corresponds to the right line otherwise it belongs to the left line.
 
-![](https://latex.codecogs.com/gif.latex?m%20%3D%20%5Cfrac%7By_%7B2%7D-y_%7B1%7D%7D%7Bx_%7B2%7D-x_%7B1%7D%7D)
+### 7. Results
 
-Once the left and right lines are grouped the average of such lines are obtained using the function `np.average()`. From there the equations of these lines are calculated using the `np.polyfit()` function. Because of this first order equation it is possible to extrapolate this mean line to the same extents of the region of interest used before.
+Finally the resulting curves can be unwarped and plotted into the original undistorted images.
 
- Hough's lines             |  Mean extrapolated lines
-:-------------------------:|:-------------------------:
-![][image8]                |  ![][image9]
+![][image9]
+
 
 For matters of displaying the thickness of the line drawn is increased to 10.
 
