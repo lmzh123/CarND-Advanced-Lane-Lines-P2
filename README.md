@@ -115,7 +115,7 @@ Binary                     |  Binary warped
 :-------------------------:|:-------------------------:
 ![][image5]                |  ![][image6]
 
-### 4. Lane pixels and curve fitting
+### 5. Lane pixels and curve fitting
 
 There are two different approaches in order to find the pixels corresponding to each line. The first one is a sliding window approach where rectangular regions are used to bound the search region for white pixels. As a starting point the binary warped image is split into two from the middle hoping to separete each line. The pixels along every column are summed up for both the left and right side and the column with the maximum values while corresponde to the beggining of each line.
 
@@ -135,8 +135,12 @@ The image will be splitted vertically and the windows will bound the area to det
 left_fit = np.polyfit(lefty, leftx, 2)
 right_fit = np.polyfit(righty, rightx, 2)
 ```
-
 ![alt text][image7]
+
+The second method to find the pixels corresponding to each line is to use the previously obtain polynomial to look around thos curves using a certain margin and hopefully the lines did not change abruptly.
+
+![alt text][image8]
+
 
 ### 2. Lines extrapolation
 
