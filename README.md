@@ -26,7 +26,17 @@ This projects aims to develop a Computer Vision pipeline in order to the detect 
 
 ### 1. Camera Calibration.
 
-In order to correct the distortion from the images the calibration matrix as well as the distortion coefficients are calculated using a set chessboard images. This chessboard of size 9x6
+In order to correct the distortion from the images the calibration matrix as well as the distortion coefficients are calculated using a set chessboard images. Firs step is to find the chessboard corners of each image and stack these points for furter computations.
+
+```
+ret, corners = cv2.findChessboardCorners(gray, (nx, ny), None)
+```
+Once all the corners are located and stored the calibration matrix and the distortion coefficients are calculated using the following OpenCV built in function. 
+
+```
+ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints, gray.shape[::-1], None, None)
+```
+Using these found parameters any image can be corrected as the images below.
 
 Original image             |  Corrected image 
 :-------------------------:|:-------------------------:
