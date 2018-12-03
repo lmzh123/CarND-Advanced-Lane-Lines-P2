@@ -182,12 +182,8 @@ For a better representation the curves that bound the lane and the radius of cur
 
 ### 8. Potential shortcomings
 
-Once again the 
+This algorithm relies highly in a good segmentation of the lane lines and even though the Saturation channel from HLS color space is more robust to light changing conditions, it is not certain that good lines are going to be obtained and that will not be affected by shades or other facts.
 
 ### 9. Possible improvements
 
-For improvements of this pipeline the following is proposed:
-
-* After the canny edge detection a set of morphological operators could be applied with a kernel that looks for diagonal lines. This could help to discard any other kind of lines that we are not interested in having.
-* After obtaining the gray scale image it could be helpfull to apply an histogram equalization to it so the sharpnes of the image is improved and it is more inmune to light changes.
-* Further tuning can be done for clustering which lines correspond to the left and right lines. For instance an outlier detection algorithm such as RANSAC along with a clustering algorithm like k-nearest neighbor could lead to a better model and more robust when different lines are seen within our region of interest. 
+In my opinion a better segmentation of the lane lines has to be done and possibly Convolutional Neural Networks for this task could be used. 
