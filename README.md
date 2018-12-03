@@ -1,7 +1,4 @@
-# CarND-Advanced-Lane-Lines-P2
-Second project of the Udacity's Self Driving Cars Nano Degree
-
-# **Finding Lane Lines on the Road** 
+# **Advanced Lane Finding** 
 
 ## Luis Miguel Zapata
 
