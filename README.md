@@ -46,9 +46,16 @@ Original image             |  Corrected image
 
 Using the found calibration parameters every incoming image from the camera is corrected using the following function.
 
+```
+undist = cv2.undistort(img, mtx, dist, None, mtx) # Undistore the image
+```
+This procedure will ensure that the calculations performed will correspond to real world measurements.
+
+
 Original image             |  Corrected image 
 :-------------------------:|:-------------------------:
 ![][image3]                |  ![][image4]
+
 
 
 
