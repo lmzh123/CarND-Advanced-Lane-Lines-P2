@@ -56,11 +56,31 @@ Original image             |  Corrected image
 :-------------------------:|:-------------------------:
 ![][image3]                |  ![][image4]
 
+### 2. Thresholding.
+Next step is to obtain the edges of the image. For this the approached that suited the best was two combine the S channel thresholding from HLS color space along with the magnitud of the gradient of RGB images. 
 
+```
+# S channel thresholding
+hls = cv2.cvtColor(img, cv2.COLOR_RGB2HLS)
+s_channel = hls[:,:,2]
+s_binary = np.zeros_like(s_channel)
+s_binary[(s_channel >= s_thresh[0]) & (s_channel <= s_thresh[1])] = 1
+```
+```
+# Gradient thresholding
+gray = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
+sobelx = cv2.Sobel(gray, cv2.CV_64F, 1, 0) 
+sobely = cv2.Sobel(gray, cv2.CV_64F, 0, 1)
+abs_sobelx = np.absolute(sobelx) 
+abs_sobely = np.absolute(sobely)
+# Threshold by magnitud
+mag = np.sqrt(np.square(sobelx)+np.square(sobely))
+scaled_mag = np.uint8(255*mag/np.max(mag))
+mag_binary = np.zeros_like(scaled_mag)
+mag_binary[(scaled_mag >= mag_thresh[0]) & (scaled_mag <= mag_thresh[1])] = 1
+```
 
-
-
-![alt text][image4]
+![alt text][image5]
 
 Using the function `region_of_interest()` the image obtained using Canny is masked with a polygonal region using the `cv2.bitwise_and()` function from OpenCV. The vertices of this region were determined as follows:
 
