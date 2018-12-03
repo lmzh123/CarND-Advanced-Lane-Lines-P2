@@ -141,7 +141,34 @@ The second method to find the pixels corresponding to each line is to use the pr
 
 ![alt text][image8]
 
+### 6. Radius of curvature and offset
 
+First thing to determine the radius of curvature is to define how much a pixel corresponds to meters in this case 720 pixels correspond to 30 meters vertically and 700 pixels correspond to 3.7 meter horizontally.
+
+```
+# Define conversions in x and y from pixels space to meters
+ym_per_pix = 30/720 # meters per pixel in y dimension
+xm_per_pix = 3.7/700 # meters per pixel in x dimension
+```
+The calucalations to determine the radius of curvature will be performed on the bottom of the image. 
+
+```
+# Define y-value where we want radius of curvature
+# We'll choose the maximum y-value, corresponding to the bottom of the image
+y_eval = np.max(ploty)
+# Calculation of R_curve (radius of curvature)
+left_curverad = ((1 + (2*left_fit_cr[0]*y_eval*ym_per_pix + left_fit_cr[1])**2)**1.5) / np.absolute(2*left_fit_cr[0])
+right_curverad = ((1 + (2*right_fit_cr[0]*y_eval*ym_per_pix + right_fit_cr[1])**2)**1.5) / np.absolute(2*right_fit_cr[0])
+```
+
+Furthermore the difference between the center of the two lines measured again on the bottom of the image and the image's center will determine how far is the car from the center of the lane.
+
+```
+left_bottomx = left_fit_cr[0]*y_eval**2 + left_fit_cr[1]*y_eval + left_fit_cr[2]
+right_bottomx = right_fit_cr[0]*y_eval**2 + right_fit_cr[1]*y_eval + right_fit_cr[2]
+curv_center = (left_bottomx + right_bottomx)/2
+offset = (curv_center - img_size[0]/2)*xm_per_pix
+```
 ### 2. Lines extrapolation
 
 Using the slope of a line equation it can be determined which of the remaining lines correspond to both the left and right line using an if statement within the `draw_lines()` function. For instance if the slope of a line is positive it corresponds to the right line otherwise it belongs to the left line.
