@@ -177,10 +177,46 @@ For a better representation the curves that bound the lane and the radius of cur
 
 ![][image11]
 
-### 8. Potential shortcomings
+
+### 8. Video processing
+For the video processing the scripts P2_video.py, im_proc.py and line.py are defined. In the P2_video.py, the frames are read one by one and processed using the pipeline presented on the steps above and the result is witten to a new video.
+
+```
+# Define the video to process
+file_name = "project_video.mp4"
+cap = cv2.VideoCapture(file_name)
+# Define the video to be written
+fps = int(cap.get(cv2.CAP_PROP_FPS))
+w = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+h = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+fourcc = cv2.VideoWriter_fourcc(*'x264')
+writer = cv2.VideoWriter("test_videos_outputs/"+file_name,
+                            fourcc, fps, (w,h))
+left_line = Line()
+right_line = Line()
+
+while(True):
+    # Capture frame-by-frame
+    ret, frame = cap.read()
+    
+```
+The line class is incorporated mostly for storing the results of the processing and computing averages of the results and for fitting the curvatures the sliding window approach is used in the first iteration, but for the following ones it is computed using the method that uses the previous polynomials as starting point.
+
+```
+left_line.current_fit = left_fit
+right_line.current_fit = right_fit
+left_line.allx = left_fitx
+left_line.ally = ploty
+right_line.allx = right_fitx
+right_line.ally = ploty
+left_line.stack_x_vals(left_fitx, left_fit)
+right_line.stack_x_vals(right_fitx, right_fit)
+```
+
+### 9. Potential shortcomings
 
 This algorithm relies highly in a good segmentation of the lane lines and even though the Saturation channel from HLS color space is more robust to light changing conditions, it is not certain that good lines are going to be obtained and that will not be affected by shades or other facts.
 
-### 9. Possible improvements
+### 10. Possible improvements
 
 In my opinion a better segmentation of the lane lines has to be done and possibly Convolutional Neural Networks for this task could be used. 
