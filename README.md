@@ -213,6 +213,8 @@ left_line.stack_x_vals(left_fitx, left_fit)
 right_line.stack_x_vals(right_fitx, right_fit)
 ```
 
+The results on the project video can be seen [here](https://youtu.be/TIRuIiJHuUE) 
+
 ### 9. Potential shortcomings
 
 This algorithm relies highly in a good segmentation of the lane lines and even though the Saturation channel from HLS color space is more robust to light changing conditions, it is not certain that good lines are going to be obtained and that will not be affected by shades or other facts.
