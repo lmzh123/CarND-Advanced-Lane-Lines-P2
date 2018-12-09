@@ -213,7 +213,7 @@ left_line.stack_x_vals(left_fitx, left_fit)
 right_line.stack_x_vals(right_fitx, right_fit)
 ```
 
-The results on the project video can be seen [here](https://youtu.be/TIRuIiJHuUE) 
+The results on the project video can be seen [here](https://youtu.be/Vp5cpL6lMHQ) 
 
 ### 9. Potential shortcomings
 

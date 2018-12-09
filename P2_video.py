@@ -84,7 +84,8 @@ while(True):
         writer.write(undist_lines_rad)
 
         # Display the resulting frame
-        cv2.imshow('warped',lane_pixels)
+        if 'result' in locals():
+            cv2.imshow('warped',result)
         cv2.imshow('final',undist_lines_rad)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break

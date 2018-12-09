@@ -22,7 +22,7 @@ def get_calib_params():
     return mtx, dist
 
 # Thresholding
-def get_binary_image(image, s_thresh=(170, 255), mag_thresh=(50, 200), dir_thresh=(0, np.pi/2)):
+def get_binary_image(image, s_thresh=(170, 255), sx_thresh =(20,100) ,mag_thresh=(50, 200), dir_thresh=(0, np.pi/2), r_thresh = [205,255]):
     """
     This function applies different thresholding method to obtain a binary image.
     Args:
@@ -33,17 +33,24 @@ def get_binary_image(image, s_thresh=(170, 255), mag_thresh=(50, 200), dir_thres
         combined_binary(numpy.array): 1-channel image
     """
     img = np.copy(image)
+    r_channel = img[:,:,2]
+    r_binary = np.zeros_like(r_channel)
+    r_binary[(r_channel >= r_thresh[0]) & (r_channel <= r_thresh[1])] = 1
+    
     # Gradient thresholding
     gray = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
     sobelx = cv2.Sobel(gray, cv2.CV_64F, 1, 0) 
-    sobely = cv2.Sobel(gray, cv2.CV_64F, 0, 1)
+    #sobely = cv2.Sobel(gray, cv2.CV_64F, 0, 1)
     abs_sobelx = np.absolute(sobelx) 
-    abs_sobely = np.absolute(sobely)
+    #abs_sobely = np.absolute(sobely)
     # Threshold by magnitud
-    mag = np.sqrt(np.square(sobelx)+np.square(sobely))
-    scaled_mag = np.uint8(255*mag/np.max(mag))
-    mag_binary = np.zeros_like(scaled_mag)
-    mag_binary[(scaled_mag >= mag_thresh[0]) & (scaled_mag <= mag_thresh[1])] = 1
+    #mag = np.sqrt(np.square(sobelx)+np.square(sobely))
+    scaled_sobel = np.uint8(255*abs_sobelx/np.max(abs_sobelx))
+    #scaled_mag = np.uint8(255*mag/np.max(mag))
+    #mag_binary = np.zeros_like(scaled_mag)
+    #mag_binary[(scaled_mag >= mag_thresh[0]) & (scaled_mag <= mag_thresh[1])] = 1
+    sxbinary = np.zeros_like(scaled_sobel)
+    sxbinary[(scaled_sobel >= sx_thresh[0]) & (scaled_sobel <= sx_thresh[1])] = 1
     """
     # Threshold by direction
     direction = np.arctan2(abs_sobely, abs_sobelx)
@@ -60,9 +67,9 @@ def get_binary_image(image, s_thresh=(170, 255), mag_thresh=(50, 200), dir_thres
     s_binary[(s_channel >= s_thresh[0]) & (s_channel <= s_thresh[1])] = 1
     
     # Combine the binary thresholds
-    combined_binary = np.zeros_like(mag_binary)
+    combined_binary = np.zeros_like(sxbinary)
     #combined_binary[(s_binary == 1) | (mag_binary == 1) | (opening == 1)] = 1
-    combined_binary[(s_binary == 1) | (mag_binary == 1)] = 1
+    combined_binary[(s_binary == 1) | (sxbinary == 1) | (r_binary == 1)] = 1
     return combined_binary
 
 def warp_image(image):
@@ -240,7 +247,7 @@ def search_around_poly(binary_warped, left_fit, right_fit):
     # HYPERPARAMETER
     # Choose the width of the margin around the previous polynomial to search
     # The quiz grader expects 100 here, but feel free to tune on your own!
-    margin = 100
+    margin = 50
 
     # Grab activated pixels
     nonzero = binary_warped.nonzero()
@@ -327,7 +334,6 @@ def measure_curvature_real(left_fit_cr, right_fit_cr, ploty, img_size):
     
     left_bottomx = left_fit_cr[0]*y_eval**2 + left_fit_cr[1]*y_eval + left_fit_cr[2]
     right_bottomx = right_fit_cr[0]*y_eval**2 + right_fit_cr[1]*y_eval + right_fit_cr[2]
-
 
     curv_center = (left_bottomx + right_bottomx)/2
     offset = (curv_center - img_size[0]/2)*xm_per_pix
